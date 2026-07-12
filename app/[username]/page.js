@@ -227,7 +227,7 @@ export default function UserProfile({ params: paramsPromise, searchParams: searc
       
       {/* Home shortcut */}
       <Link href="/" className="profile-home-link">
-        🏠 midnight
+        <img src="/images/midnight-logo.png" alt="Midnight Logo" style={{ height: '70px', objectFit: 'contain' }} />
       </Link>
 
       <main className="profile-card-wrapper" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>

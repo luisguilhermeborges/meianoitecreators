@@ -141,7 +141,7 @@ export default function UserProfile({ params: paramsPromise, searchParams: searc
           <div className="sidebar-divider"></div>
           
           <Link href={`/${user.username}`} className="sidebar-back-btn">
-            👤 Ver Perfil do Piloto
+            👤 Ver Perfil do Streamer
           </Link>
           <Link href="/" className="sidebar-back-btn">
             🏠 Ir para a Home
@@ -204,7 +204,7 @@ export default function UserProfile({ params: paramsPromise, searchParams: searc
       
       {/* Home shortcut */}
       <Link href="/" className="profile-home-link">
-        🏠 pilotos.gg
+        🏠 midnight
       </Link>
 
       <main className="profile-card-wrapper">

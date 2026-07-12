@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg-dark: #07090e;
-  --bg-card: #0e121e;
-  --bg-card-hover: #141b2c;
-  --accent-yellow: #ffcb05;
-  --accent-yellow-glow: rgba(255, 203, 5, 0.45);
-  --accent-blue: #00bcd4;
+  --bg-dark: #07050f;
+  --bg-card: #0d0a1a;
+  --bg-card-hover: #140f29;
+  --accent-yellow: #8b5cf6;
+  --accent-yellow-glow: rgba(139, 92, 246, 0.45);
+  --accent-blue: #a855f7;
   --text-primary: #ffffff;
-  --text-secondary: #8c97ac;
+  --text-secondary: #94a3b8;
   --border-color: rgba(255, 255, 255, 0.05);
-  --border-active: rgba(255, 203, 5, 0.3);
+  --border-active: rgba(139, 92, 246, 0.3);
   --discord-blue: #5865f2;
 }
 

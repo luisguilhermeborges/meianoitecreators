@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Pilotos.gg | Streamer Bazar & Comunidade",
+  title: "Midnight | Streamer Bazar & Comunidade",
   description: "Encontre seus streamers favoritos, veja lives online e explore lojas integradas do Discord.",
 };
 

@@ -93,8 +93,9 @@ export default function Home() {
       <div className="stars-overlay"></div>
 
       <header className="home-header">
-        <div className="header-logo">
-          <span className="logo-accent">pilotos</span>.gg
+        <div className="header-logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/images/logo.png" alt="Midnight Logo" style={{ height: '40px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
+          <span className="logo-text-fallback" style={{ display: 'none', fontSize: '20px', fontWeight: '800' }}><span className="logo-accent">mid</span>night</span>
         </div>
         
         <div className="header-actions">
@@ -151,7 +152,7 @@ export default function Home() {
       <main className="home-main">
         {/* Main Search Panel */}
         <section className="search-section">
-          <h2>Encontre os Pilotos da Cidade</h2>
+          <h2>Encontre os Streamers da Cidade</h2>
           <div className="search-bar-container">
             <input 
               type="text" 
@@ -234,7 +235,7 @@ export default function Home() {
                 ))
               ) : (
                 <div className="empty-column-message">
-                  Nenhum piloto cadastrado.
+                  Nenhum streamer cadastrado.
                 </div>
               )}
             </div>
@@ -243,7 +244,7 @@ export default function Home() {
       </main>
 
       <footer className="home-footer-text">
-        <p>&copy; {new Date().getFullYear()} Pilotos.gg - Todos os direitos reservados. Clone estético premium.</p>
+        <p>&copy; {new Date().getFullYear()} Midnight RP - Todos os direitos reservados. Design Premium.</p>
       </footer>
     </div>
   );

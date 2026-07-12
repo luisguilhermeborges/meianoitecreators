@@ -221,8 +221,9 @@ export default function Dashboard() {
     <div className="dash-container">
       <header className="dash-header">
         <div className="dash-logo">
-          <Link href="/">
-            <span className="logo-accent">pilotos</span>.gg
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+            <img src="/images/logo.png" alt="Midnight Logo" style={{ height: '32px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
+            <span className="logo-text-fallback" style={{ display: 'none', fontSize: '18px', fontWeight: '800', color: 'white' }}><span className="logo-accent" style={{ color: 'var(--accent-yellow)' }}>mid</span>night</span>
           </Link>
           <span className="dash-tag">Painel</span>
         </div>

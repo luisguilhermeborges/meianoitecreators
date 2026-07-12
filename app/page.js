@@ -98,7 +98,7 @@ export default function Home() {
 
       <header className="home-header">
         <div className="header-logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/images/midnight-logo.png" alt="Midnight Logo" style={{ height: '65px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
+          <img src="/images/midnight-logo.png" alt="Midnight Logo" style={{ height: '75px', width: '220px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
           <span className="logo-text-fallback" style={{ display: 'none', fontSize: '24px', fontWeight: '800' }}><span className="logo-accent">mid</span>night</span>
         </div>
         

@@ -29,7 +29,11 @@ export default function Dashboard() {
       instagram: '',
       youtube: '',
       twitch: '',
-      discord: ''
+      discord: '',
+      x: '',
+      steam: '',
+      spotify: '',
+      kick: ''
     }
   });
 
@@ -76,7 +80,11 @@ export default function Dashboard() {
           instagram: data.socials?.instagram || '',
           youtube: data.socials?.youtube || '',
           twitch: data.socials?.twitch || '',
-          discord: data.socials?.discord || ''
+          discord: data.socials?.discord || '',
+          x: data.socials?.x || '',
+          steam: data.socials?.steam || '',
+          spotify: data.socials?.spotify || '',
+          kick: data.socials?.kick || ''
         }
       });
 
@@ -442,6 +450,18 @@ export default function Dashboard() {
                   />
                 </div>
                 <div className="form-group">
+                  <label>X (Twitter) Username</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.socials.x}
+                    placeholder="exemplo_x"
+                    onChange={(e) => setProfileForm({
+                      ...profileForm,
+                      socials: { ...profileForm.socials, x: e.target.value }
+                    })}
+                  />
+                </div>
+                <div className="form-group">
                   <label>Twitch Channel Name</label>
                   <input 
                     type="text" 
@@ -462,6 +482,42 @@ export default function Dashboard() {
                     onChange={(e) => setProfileForm({
                       ...profileForm,
                       socials: { ...profileForm.socials, youtube: e.target.value }
+                    })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Steam Profile ID</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.socials.steam}
+                    placeholder="id_steam"
+                    onChange={(e) => setProfileForm({
+                      ...profileForm,
+                      socials: { ...profileForm.socials, steam: e.target.value }
+                    })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Spotify Profile ID</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.socials.spotify}
+                    placeholder="spotify_user"
+                    onChange={(e) => setProfileForm({
+                      ...profileForm,
+                      socials: { ...profileForm.socials, spotify: e.target.value }
+                    })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Kick Channel Name</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.socials.kick}
+                    placeholder="canal_kick"
+                    onChange={(e) => setProfileForm({
+                      ...profileForm,
+                      socials: { ...profileForm.socials, kick: e.target.value }
                     })}
                   />
                 </div>

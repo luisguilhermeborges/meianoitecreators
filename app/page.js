@@ -83,9 +83,13 @@ export default function Home() {
     s.username.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Split streamers into online vs offline for visual organization, or column systems
+  // Split streamers into online vs offline
   const onlineStreamers = filteredStreamers.filter(s => s.isOnline);
-  const offlineStreamers = filteredStreamers.filter(s => !s.isOnline);
+  
+  // Split ALL filtered streamers into two columns for the double grid (Image 3 style)
+  const halfIndex = Math.ceil(filteredStreamers.length / 2);
+  const leftColumnStreamers = filteredStreamers.slice(0, halfIndex);
+  const rightColumnStreamers = filteredStreamers.slice(halfIndex);
 
   return (
     <div className="home-container">
@@ -94,8 +98,8 @@ export default function Home() {
 
       <header className="home-header">
         <div className="header-logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/images/midnight-logo.png" alt="Midnight Logo" style={{ height: '40px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
-          <span className="logo-text-fallback" style={{ display: 'none', fontSize: '20px', fontWeight: '800' }}><span className="logo-accent">mid</span>night</span>
+          <img src="/images/midnight-logo.png" alt="Midnight Logo" style={{ height: '65px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }} />
+          <span className="logo-text-fallback" style={{ display: 'none', fontSize: '24px', fontWeight: '800' }}><span className="logo-accent">mid</span>night</span>
         </div>
         
         <div className="header-actions">
@@ -152,7 +156,7 @@ export default function Home() {
       <main className="home-main">
         {/* Main Search Panel */}
         <section className="search-section">
-          <h2>Encontre os Streamers da Cidade</h2>
+          <h2>Onde o verdadeiro roleplay acontece!</h2>
           <div className="search-bar-container">
             <input 
               type="text" 
@@ -165,78 +169,86 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Streamers Grid Panel */}
-        <section className="streamers-container-grid">
-          {/* Online Column/Section */}
-          <div className="streamers-column">
-            <div className="column-header">
-              <span className="live-dot-glow"></span>
-              <h3>AO VIVO AGORA</h3>
-            </div>
-            <div className="streamers-grid">
-              {onlineStreamers.length > 0 ? (
-                onlineStreamers.map(s => (
-                  <Link href={`/${s.username}`} key={s.id} className="streamer-card card-online">
-                    <div className="card-avatar-wrapper">
-                      <img src={s.avatar} alt={s.displayName} className="card-avatar" />
-                      <span className="online-tag">LIVE</span>
+        {/* Online Streams Horizontal Swipe Row */}
+        <section className="live-slider-section">
+          <div className="column-header">
+            <span className="live-dot-glow"></span>
+            <h3>AO VIVO AGORA</h3>
+          </div>
+          <div className="live-streams-row">
+            {onlineStreamers.length > 0 ? (
+              onlineStreamers.map(s => (
+                <Link href={`/${s.username}`} key={s.id} className="live-stream-slide">
+                  <div className="slide-avatar-wrapper">
+                    <img src={s.avatar} alt={s.displayName} className="slide-avatar" />
+                    <span className="slide-live-badge">LIVE</span>
+                  </div>
+                  <div className="slide-info">
+                    <div className="slide-name-wrapper">
+                      <h4>{s.displayName}</h4>
+                      {s.verified && <span className="verified-badge">✓</span>}
                     </div>
-                    <div className="card-info">
-                      <div className="card-name-wrapper">
+                    <span className="slide-username">@{s.username}</span>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="empty-slider-message">
+                Nenhum streamer em live no momento.
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Double Column Grid Section (pilotos.gg layout style) */}
+        <section className="pilotos-double-panel">
+          {/* Left Column Grid */}
+          <div className="pilotos-panel-column">
+            <div className="pilotos-panel-grid">
+              {leftColumnStreamers.length > 0 ? (
+                leftColumnStreamers.map(s => (
+                  <Link href={`/${s.username}`} key={s.id} className="piloto-grid-card">
+                    <div className="grid-card-avatar-wrapper">
+                      <img src={s.avatar} alt={s.displayName} className="grid-card-avatar" />
+                      {s.verified && <span className="grid-card-verified">✓</span>}
+                    </div>
+                    <div className="grid-card-info">
+                      <div className="grid-card-name-row">
                         <h4>{s.displayName}</h4>
-                        {s.verified && <span className="verified-badge">✓</span>}
                       </div>
-                      <span className="card-username">@{s.username}</span>
-                      <div className="card-tags">
-                        {s.tags.slice(0, 2).map((t, i) => (
-                          <span key={i} className="card-tag">{t}</span>
-                        ))}
-                      </div>
+                      <span>@{s.username}</span>
                     </div>
                   </Link>
                 ))
               ) : (
-                <div className="empty-column-message">
-                  Nenhum streamer em live no momento.
-                </div>
+                <div className="empty-column-message">Nenhum perfil nesta coluna.</div>
               )}
             </div>
           </div>
 
-          {/* Vertical Divider */}
-          <div className="grid-vertical-divider"></div>
+          {/* Vertical Separator Line */}
+          <div className="pilotos-panel-divider"></div>
 
-          {/* Offline Column/Section */}
-          <div className="streamers-column">
-            <div className="column-header">
-              <span className="offline-dot"></span>
-              <h3>OFFLINE</h3>
-            </div>
-            <div className="streamers-grid">
-              {offlineStreamers.length > 0 ? (
-                offlineStreamers.map(s => (
-                  <Link href={`/${s.username}`} key={s.id} className="streamer-card">
-                    <div className="card-avatar-wrapper">
-                      <img src={s.avatar} alt={s.displayName} className="card-avatar" />
+          {/* Right Column Grid */}
+          <div className="pilotos-panel-column">
+            <div className="pilotos-panel-grid">
+              {rightColumnStreamers.length > 0 ? (
+                rightColumnStreamers.map(s => (
+                  <Link href={`/${s.username}`} key={s.id} className="piloto-grid-card">
+                    <div className="grid-card-avatar-wrapper">
+                      <img src={s.avatar} alt={s.displayName} className="grid-card-avatar" />
+                      {s.verified && <span className="grid-card-verified">✓</span>}
                     </div>
-                    <div className="card-info">
-                      <div className="card-name-wrapper">
+                    <div className="grid-card-info">
+                      <div className="grid-card-name-row">
                         <h4>{s.displayName}</h4>
-                        {s.verified && <span className="verified-badge">✓</span>}
                       </div>
-                      <span className="card-username">@{s.username}</span>
-                      <div className="card-tags">
-                        {s.tags.slice(0, 2).map((t, i) => (
-                          <span key={i} className="card-tag">{t}</span>
-                        ))}
-                      </div>
+                      <span>@{s.username}</span>
                     </div>
                   </Link>
                 ))
               ) : (
-                <div className="empty-column-message">
-                  Nenhum streamer cadastrado.
-                </div>
+                <div className="empty-column-message">Nenhum perfil nesta coluna.</div>
               )}
             </div>
           </div>
@@ -244,7 +256,7 @@ export default function Home() {
       </main>
 
       <footer className="home-footer-text">
-        <p>&copy; {new Date().getFullYear()} Midnight RP - Todos os direitos reservados. Design Premium.</p>
+        <p>Midnight</p>
       </footer>
     </div>
   );

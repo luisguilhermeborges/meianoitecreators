@@ -1690,3 +1690,58 @@ body {
   }
 }
 
+.nav-arrow-btn {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: white;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.nav-arrow-btn:hover {
+  background: var(--accent-yellow);
+  color: black;
+  border-color: var(--accent-yellow);
+}
+
+.social-circle-btn, .social-circle-btn-more {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+}
+
+.social-circle-btn:hover {
+  background: var(--accent-yellow);
+  color: #07050f;
+  border-color: var(--accent-yellow);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 15px var(--accent-yellow-glow);
+}
+
+.social-circle-btn-more {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: default;
+}
+
+
+

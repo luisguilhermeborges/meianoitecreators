@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -11,6 +11,19 @@ export default function Home() {
   const [mockUsername, setMockUsername] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const sliderRef = useRef(null);
+
+  const scrollSliderLeft = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollSliderRight = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     fetchStreamers();
@@ -114,15 +127,12 @@ export default function Home() {
             </div>
           ) : (
             <div className="login-group">
-              <Link href="/api/auth/discord" className="discord-btn">
+              <Link href="/api/auth/discord" className="glow-btn">
                 <svg width="18" height="18" viewBox="0 0 127.14 96.36" fill="currentColor">
                   <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.89-.65,1.76-1.34,2.58-2.07a75.17,75.17,0,0,0,72.68,0c.83.73,1.69,1.42,2.58,2.07a68.74,68.74,0,0,1-10.5,5,77.5,77.5,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31.6-18.83C129.87,48.24,123.63,25.43,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
                 </svg>
                 Entrar com Discord
               </Link>
-              <button onClick={() => setShowMockLogin(true)} className="glow-btn">
-                Login Rápido (Dev)
-              </button>
             </div>
           )}
         </div>
@@ -156,11 +166,10 @@ export default function Home() {
       <main className="home-main">
         {/* Main Search Panel */}
         <section className="search-section">
-          <h2>Onde o verdadeiro roleplay acontece!</h2>
           <div className="search-bar-container">
             <input 
               type="text" 
-              placeholder="Buscar streamer pelo nome..." 
+              placeholder="Buscar pelo creator..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="search-input"
@@ -169,39 +178,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Online Streams Horizontal Swipe Row */}
-        <section className="live-slider-section">
-          <div className="column-header">
-            <span className="live-dot-glow"></span>
-            <h3>AO VIVO AGORA</h3>
-          </div>
-          <div className="live-streams-row">
-            {onlineStreamers.length > 0 ? (
-              onlineStreamers.map(s => (
-                <Link href={`/${s.username}`} key={s.id} className="live-stream-slide">
-                  <div className="slide-avatar-wrapper">
-                    <img src={s.avatar} alt={s.displayName} className="slide-avatar" />
-                    <span className="slide-live-badge">LIVE</span>
-                  </div>
-                  <div className="slide-info">
-                    <div className="slide-name-wrapper">
-                      <h4>{s.displayName}</h4>
-                      {s.verified && <span className="verified-badge">✓</span>}
-                    </div>
-                    <span className="slide-username">@{s.username}</span>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <div className="empty-slider-message">
-                Nenhum streamer em live no momento.
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* Double Column Grid Section (pilotos.gg layout style) */}
-        <section className="pilotos-double-panel">
+        {/* Double Column Grid Section (pilotos.gg layout style) - NOW FIRST */}
+        <section className="pilotos-double-panel" style={{ marginBottom: '40px' }}>
           {/* Left Column Grid */}
           <div className="pilotos-panel-column">
             <div className="pilotos-panel-grid">
@@ -251,6 +229,43 @@ export default function Home() {
                 <div className="empty-column-message">Nenhum perfil nesta coluna.</div>
               )}
             </div>
+          </div>
+        </section>
+
+        {/* Online Streams Horizontal Swipe Row - NOW SECOND */}
+        <section className="live-slider-section">
+          <div className="slider-header-wrapper" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+            <div className="column-header" style={{ marginBottom: 0 }}>
+              <span className="live-dot-glow"></span>
+              <h3>AO VIVO AGORA</h3>
+            </div>
+            <div className="slider-nav-btns" style={{ display: 'flex', gap: '8px' }}>
+              <button onClick={scrollSliderLeft} className="nav-arrow-btn">❮</button>
+              <button onClick={scrollSliderRight} className="nav-arrow-btn">❯</button>
+            </div>
+          </div>
+          <div className="live-streams-row" ref={sliderRef}>
+            {onlineStreamers.length > 0 ? (
+              onlineStreamers.map(s => (
+                <Link href={`/${s.username}`} key={s.id} className="live-stream-slide">
+                  <div className="slide-avatar-wrapper">
+                    <img src={s.avatar} alt={s.displayName} className="slide-avatar" />
+                    <span className="slide-live-badge">LIVE</span>
+                  </div>
+                  <div className="slide-info">
+                    <div className="slide-name-wrapper">
+                      <h4>{s.displayName}</h4>
+                      {s.verified && <span className="verified-badge">✓</span>}
+                    </div>
+                    <span className="slide-username">@{s.username}</span>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="empty-slider-message">
+                Nenhum streamer em live no momento.
+              </div>
+            )}
           </div>
         </section>
       </main>

@@ -33,7 +33,11 @@ export async function PUT(req) {
       'favoriteMusic',
       'favoriteMusicImage',
       'isOnline',
-      'tags'
+      'tags',
+      'flags',
+      'playlistName',
+      'playlistImage',
+      'discordServerTag'
     ];
 
     const updates = {};

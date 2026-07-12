@@ -15,10 +15,33 @@ export default function UserProfile({ params: paramsPromise, searchParams: searc
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewsUpdated, setViewsUpdated] = useState(false);
+  const [lanyardData, setLanyardData] = useState(null);
 
   useEffect(() => {
     fetchProfileData();
   }, [username]);
+
+  useEffect(() => {
+    if (!user) return;
+    
+    const fetchLanyard = async () => {
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${user.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setLanyardData(data.data);
+          }
+        }
+      } catch (err) {
+        console.error("Lanyard error:", err);
+      }
+    };
+
+    fetchLanyard();
+    const interval = setInterval(fetchLanyard, 10000);
+    return () => clearInterval(interval);
+  }, [user]);
 
   const fetchProfileData = async () => {
     try {
@@ -207,82 +230,138 @@ export default function UserProfile({ params: paramsPromise, searchParams: searc
         🏠 midnight
       </Link>
 
-      <main className="profile-card-wrapper">
-        <div className="profile-card glass-panel">
+      <main className="profile-card-wrapper" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+        <div className="profile-card-floating" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: '100%', maxWidth: '500px', padding: '24px', position: 'relative', zIndex: 10 }}>
           
           {/* Avatar Area */}
-          <div className="profile-avatar-circle">
-            <img src={user.avatar} alt={user.displayName} className="profile-avatar-img" />
-            {user.verified && <span className="profile-verified-checkmark">✓</span>}
+          <div className="profile-avatar-circle" style={{ position: 'relative', width: '120px', height: '120px', marginBottom: '20px' }}>
+            <img src={user.avatar} alt={user.displayName} className="profile-avatar-img" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(255,255,255,0.25)', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }} />
+            {user.verified && (
+              <span className="profile-verified-checkmark" style={{ position: 'absolute', bottom: '2px', right: '2px', background: '#3b82f6', color: 'white', borderRadius: '50%', width: '26px', height: '26px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', border: '2px solid #000', fontWeight: '900' }}>✓</span>
+            )}
           </div>
 
-          <h2 className="profile-display-name">{user.displayName}</h2>
-          <p className="profile-bio-text">{user.bio}</p>
+          {/* Name */}
+          <h2 className="profile-display-name-centered" style={{ fontSize: '32px', fontWeight: '800', textTransform: 'uppercase', color: 'white', marginBottom: '8px', letterSpacing: '0.5px' }}>
+            {user.displayName}
+          </h2>
 
-          <div className="card-divider-dashed"></div>
+          {/* Bio tagline */}
+          <p className="profile-bio-text-centered" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.8)', marginBottom: '12px', fontStyle: 'italic', maxWidth: '380px', lineHeight: '1.4' }}>
+            {user.bio || "don't be a copy, be the reference"}
+          </p>
 
-          {/* Social Links */}
-          <div className="profile-social-icons">
+          {/* Flag list */}
+          {user.flags && (
+            <div className="profile-flags-row" style={{ fontSize: '22px', display: 'flex', gap: '10px', marginBottom: '24px' }}>
+              {user.flags}
+            </div>
+          )}
+
+          {/* Social Links Icons Row */}
+          <div className="profile-social-icons-centered" style={{ display: 'flex', gap: '14px', marginBottom: '28px' }}>
             {user.socials?.instagram && (
-              <a href={`https://instagram.com/${user.socials.instagram}`} target="_blank" className="social-icon instagram" title="Instagram">
+              <a href={`https://instagram.com/${user.socials.instagram}`} target="_blank" className="social-circle-btn">
                 📸
               </a>
             )}
-            {user.socials?.youtube && (
-              <a href={`https://youtube.com/${user.socials.youtube}`} target="_blank" className="social-icon youtube" title="YouTube">
-                🎥
-              </a>
-            )}
             {user.socials?.twitch && (
-              <a href={`https://twitch.tv/${user.socials.twitch}`} target="_blank" className="social-icon twitch" title="Twitch">
+              <a href={`https://twitch.tv/${user.socials.twitch}`} target="_blank" className="social-circle-btn">
                 🎮
               </a>
             )}
+            {user.socials?.youtube && (
+              <a href={`https://youtube.com/${user.socials.youtube}`} target="_blank" className="social-circle-btn">
+                🎥
+              </a>
+            )}
             {user.socials?.discord && (
-              <a href={`https://discord.com/users/${user.id}`} target="_blank" className="social-icon discord" title="Discord Link">
+              <a href={`https://discord.com/users/${user.id}`} target="_blank" className="social-circle-btn">
                 💬
               </a>
             )}
+            <span className="social-circle-btn-more">+5</span>
           </div>
 
-          <div className="card-divider-dashed"></div>
+          {/* Discord Live Status capsule (Syncing from Lanyard in real-time) */}
+          <div className="discord-status-capsule" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 20px', borderRadius: '100px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.06)', marginBottom: '24px', minWidth: '220px', justifyContent: 'center', backdropFilter: 'blur(10px)' }}>
+            <div className="capsule-avatar-wrapper" style={{ position: 'relative', width: '32px', height: '32px' }}>
+              <img src={user.avatar} alt="Discord Avatar" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+              <span className="status-dot" style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '11px', height: '11px', borderRadius: '50%', border: '2px solid #000', background: lanyardData ? (lanyardData.discord_status === 'online' ? '#22c55e' : lanyardData.discord_status === 'dnd' ? '#ef4444' : lanyardData.discord_status === 'idle' ? '#eab308' : '#94a3b8') : '#94a3b8' }}></span>
+            </div>
+            <span style={{ fontSize: '14px', fontWeight: '700', color: 'white' }}>{user.username}</span>
+            {user.discordServerTag && (
+              <span className="guild-tag" style={{ background: 'rgba(139, 92, 246, 0.15)', border: '1px solid rgba(139, 92, 246, 0.3)', fontSize: '10px', fontWeight: '800', padding: '2px 8px', borderRadius: '100px', color: '#a855f7', letterSpacing: '0.5px' }}>
+                {user.discordServerTag}
+              </span>
+            )}
+          </div>
 
-          {/* Favorite Game */}
-          {user.favoriteGame && (
-            <div className="favorite-game-block">
-              {user.favoriteGameImage && (
-                <img src={user.favoriteGameImage} alt={user.favoriteGame} className="fav-game-img" />
-              )}
-              <div className="fav-game-info">
-                <span className="fav-label">Jogo favorito:</span>
-                <span className="fav-name">{user.favoriteGame}</span>
+          {/* Favorite Game block (Real-time presence game sync / Fallback) */}
+          {(lanyardData?.activities?.find(a => a.type === 0) || user.favoriteGame) && (
+            <div className="favorite-game-block-premium" style={{ width: '100%', maxWidth: '380px', display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', borderRadius: '16px', marginBottom: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', justifyContent: 'space-between', backdropFilter: 'blur(8px)', transition: 'all 0.3s' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <img 
+                  src={
+                    lanyardData?.activities?.find(a => a.type === 0) 
+                      ? (lanyardData.activities.find(a => a.type === 0).assets?.large_image?.startsWith('spotify:') 
+                        ? lanyardData.spotify.album_art_url 
+                        : `https://cdn.discordapp.com/app-assets/${lanyardData.activities.find(a => a.type === 0).application_id}/${lanyardData.activities.find(a => a.type === 0).assets?.large_image}.png`)
+                      : (user.favoriteGameImage || '/images/game-placeholder.jpg')
+                  } 
+                  alt="Game Art" 
+                  style={{ width: '46px', height: '46px', borderRadius: '10px', objectFit: 'cover' }}
+                  onError={(e) => { e.target.src = user.favoriteGameImage || '/images/game-placeholder.jpg'; }}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)' }}>
+                    {lanyardData?.activities?.find(a => a.type === 0) ? 'Jogando agora:' : 'Jogo favorito:'}
+                  </span>
+                  <span style={{ fontSize: '14px', fontWeight: '700', color: 'white' }}>
+                    {lanyardData?.activities?.find(a => a.type === 0)?.name || user.favoriteGame}
+                  </span>
+                </div>
               </div>
-              <span className="fav-arrow">›</span>
+              <span style={{ fontSize: '16px', color: 'rgba(255,255,255,0.25)' }}>❯</span>
             </div>
           )}
 
-          {user.favoriteGame && <div className="card-divider-dashed"></div>}
-
-          {/* Favorite Music */}
-          {user.favoriteMusic && (
-            <div className="favorite-music-block">
-              <div className="fav-music-info">
-                <span className="fav-label">Música favorita:</span>
-                <span className="fav-name">{user.favoriteMusic}</span>
+          {/* Spotify / Playlist block (Real-time Spotify sync / Fallback) */}
+          {(lanyardData?.listening_to_spotify || user.playlistName || user.favoriteMusic) && (
+            <div className="favorite-music-block-premium" style={{ width: '100%', maxWidth: '380px', display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 20px', borderRadius: '16px', marginBottom: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', justifyContent: 'space-between', backdropFilter: 'blur(8px)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <img 
+                  src={
+                    lanyardData?.listening_to_spotify 
+                      ? lanyardData.spotify.album_art_url 
+                      : (user.playlistImage || user.favoriteMusicImage || '/images/music-placeholder.jpg')
+                  } 
+                  alt="Music Cover" 
+                  style={{ width: '46px', height: '46px', borderRadius: '10px', objectFit: 'cover' }}
+                  onError={(e) => { e.target.src = user.playlistImage || user.favoriteMusicImage || '/images/music-placeholder.jpg'; }}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)' }}>
+                    {lanyardData?.listening_to_spotify ? 'Ouvindo no Spotify:' : 'Playlist favorita:'}
+                  </span>
+                  <span style={{ fontSize: '14px', fontWeight: '700', color: 'white', maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {lanyardData?.listening_to_spotify 
+                      ? `${lanyardData.spotify.song} - ${lanyardData.spotify.artist}` 
+                      : (user.playlistName || user.favoriteMusic)}
+                  </span>
+                </div>
               </div>
-              {user.favoriteMusicImage && (
-                <img src={user.favoriteMusicImage} alt="Album Art" className="fav-music-img" />
-              )}
+              <span style={{ fontSize: '16px', color: 'rgba(255,255,255,0.25)' }}>❮</span>
             </div>
           )}
-
-          {user.favoriteMusic && <div className="card-divider-dashed"></div>}
 
           {/* Views stats & Store path */}
-          <div className="profile-footer-stats">
-            <span className="profile-views-count">👁️ {user.views?.toLocaleString()} visualizações</span>
-            <Link href={`/${user.username}?shop=1`} className="glow-btn profile-shop-btn">
-              🛒 Ir para a Loja
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', marginTop: '12px' }}>
+            <span className="profile-views-count" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              👁️ {user.views?.toLocaleString()} visualizações
+            </span>
+            <Link href={`/${user.username}?shop=1`} className="glow-btn" style={{ padding: '8px 24px', borderRadius: '100px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px', textDecoration: 'none' }}>
+              🛒 Visitar Bazar
             </Link>
           </div>
 

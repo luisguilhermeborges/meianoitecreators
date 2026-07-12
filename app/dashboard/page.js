@@ -21,6 +21,10 @@ export default function Dashboard() {
     favoriteGameImage: '',
     favoriteMusic: '',
     favoriteMusicImage: '',
+    flags: '',
+    playlistName: '',
+    playlistImage: '',
+    discordServerTag: '',
     socials: {
       instagram: '',
       youtube: '',
@@ -64,6 +68,10 @@ export default function Dashboard() {
         favoriteGameImage: data.favoriteGameImage || '',
         favoriteMusic: data.favoriteMusic || '',
         favoriteMusicImage: data.favoriteMusicImage || '',
+        flags: data.flags || '',
+        playlistName: data.playlistName || '',
+        playlistImage: data.playlistImage || '',
+        discordServerTag: data.discordServerTag || '',
         socials: {
           instagram: data.socials?.instagram || '',
           youtube: data.socials?.youtube || '',
@@ -356,6 +364,46 @@ export default function Dashboard() {
                     value={profileForm.favoriteMusicImage}
                     placeholder="https://exemplo.com/album.jpg"
                     onChange={(e) => setProfileForm({ ...profileForm, favoriteMusicImage: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <h4 className="section-subtitle">🌍 Bandeiras, Playlist e Discord Guild</h4>
+              <div className="form-grid-2">
+                <div className="form-group">
+                  <label>Bandeiras (Emojis de Bandeira)</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.flags}
+                    placeholder="Ex: 🇫🇷 🇧🇷 🇺🇸"
+                    onChange={(e) => setProfileForm({ ...profileForm, flags: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Tag de Servidor/Guilda Discord</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.discordServerTag}
+                    placeholder="Ex: ⚡ RUSH"
+                    onChange={(e) => setProfileForm({ ...profileForm, discordServerTag: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Playlist Favorita (Título)</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.playlistName}
+                    placeholder="Ex: All The Way Down"
+                    onChange={(e) => setProfileForm({ ...profileForm, playlistName: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Capa da Playlist (URL)</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.playlistImage}
+                    placeholder="https://exemplo.com/capa-playlist.jpg"
+                    onChange={(e) => setProfileForm({ ...profileForm, playlistImage: e.target.value })}
                   />
                 </div>
               </div>

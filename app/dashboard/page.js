@@ -260,6 +260,15 @@ export default function Dashboard() {
           >
             🛍️ Gerenciar Bazar/Loja
           </button>
+           <button 
+             className={`sidebar-tab ${activeTab === 'profile' && typeof document !== 'undefined' && document.getElementById('socials-section')?.getBoundingClientRect().top < window.innerHeight ? 'active' : ''}`}
+             onClick={() => { setActiveTab('profile'); setTimeout(() => { document.getElementById('socials-section')?.scrollIntoView({ behavior: 'smooth' }); }, 150); }}
+           >
+             📱 Adicionar Redes Sociais
+           </button>
+           
+           <div className="sidebar-links-divider"></div>
+          
           <button 
             className={`sidebar-tab ${activeTab === 'status' ? 'active' : ''}`}
             onClick={() => setActiveTab('status')}
@@ -408,7 +417,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <h4 className="section-subtitle">📱 Redes Sociais Sync (Discord Sync)</h4>
+              <h4 id="socials-section" className="section-subtitle">📱 Redes Sociais Sync (Discord Sync)</h4>
               <div className="form-grid-2">
                 <div className="form-group">
                   <label>Discord Tag (Username)</label>

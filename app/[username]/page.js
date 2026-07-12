@@ -16,10 +16,24 @@ export default function UserProfile({ params: paramsPromise, searchParams: searc
   const [searchQuery, setSearchQuery] = useState('');
   const [viewsUpdated, setViewsUpdated] = useState(false);
   const [lanyardData, setLanyardData] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     fetchProfileData();
+    fetchCurrentUser();
   }, [username]);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUser(data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -259,7 +273,7 @@ export default function UserProfile({ params: paramsPromise, searchParams: searc
           )}
 
           {/* Social Links Icons Row */}
-          <div className="profile-social-icons-centered" style={{ display: 'flex', gap: '14px', marginBottom: '28px' }}>
+          <div className="profile-social-icons-centered" style={{ display: 'flex', gap: '14px', marginBottom: '28px', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {user.socials?.instagram && (
               <a href={`https://instagram.com/${user.socials.instagram}`} target="_blank" className="social-circle-btn">
                 📸
@@ -280,7 +294,13 @@ export default function UserProfile({ params: paramsPromise, searchParams: searc
                 💬
               </a>
             )}
-            <span className="social-circle-btn-more">+5</span>
+            {currentUser && currentUser.id === user.id ? (
+              <Link href="/dashboard" className="social-circle-btn" style={{ background: 'rgba(139, 92, 246, 0.25)', borderColor: 'rgba(139, 92, 246, 0.4)', color: '#c084fc', fontWeight: '800', fontSize: '13px' }} title="Adicionar Redes Sociais">
+                ➕
+              </Link>
+            ) : (
+              <span className="social-circle-btn-more">+5</span>
+            )}
           </div>
 
           {/* Discord Live Status capsule (Syncing from Lanyard in real-time) */}
